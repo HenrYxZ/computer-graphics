@@ -70,7 +70,7 @@ def gaussian(window, size, sigma=None):
     https://medium.com/@akumar5/computer-vision-gaussian-filter-from-scratch-b485837b6e09
     """
     if not sigma:
-        sigma = size // 6
+        sigma = max(size // 6, 2)
     total = 0
     center = np.array([size / 2, size / 2])
     sum_of_weights = 0
