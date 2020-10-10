@@ -11,13 +11,13 @@ from constants import MAX_QUALITY
 from light import DirectionalLight
 from material import BRDFMaterial
 from object import Sphere
-from render import render
+from render import render, render_mp
 from scene import Scene
 import constants
 import utils
 
-SCREEN_WIDTH = 1000
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 600
+SCREEN_HEIGHT = 400
 OUT_DIR = "output"
 OUTPUT_IMG_FILENAME = f"{OUT_DIR}/4_six_spheres.jpg"
 MULTICOLOR_SPECTAL_CHANNELS = 7
@@ -27,13 +27,13 @@ def set_camera():
     camera_pos = np.array([0.0, 0.0, 0.0])
     v_view = np.array([0.0, 0.0, 1.0])
     v_up = np.array([0.0, 1.0, 0.0])
-    return Camera(camera_pos, v_view, v_up, d=0.5, scale_x=1, scale_y=0.6)
+    return Camera(camera_pos, v_view, v_up, d=0.5, scale_x=0.6, scale_y=0.4)
 
 
 def set_scene():
     z = 1
-    y = [0.3, -0.3]
-    x = [-0.6, 0, 0.6]
+    y = [0.2, -0.2]
+    x = [-0.4, 0, 0.4]
     # light_direction = np.array([30, -100, 25])
     light_direction = np.array([0, -0.13, 1])
     radius = 0.15
@@ -76,7 +76,7 @@ def main():
     # Rendering
     timer = utils.Timer()
     timer.start()
-    screen = render(scene, main_camera, SCREEN_HEIGHT, SCREEN_WIDTH)
+    screen = render_mp(scene, main_camera, SCREEN_HEIGHT, SCREEN_WIDTH)
     timer.stop()
     # ------------------------------------------------------------------------
     print(f"Total time spent rendering: {timer}")
