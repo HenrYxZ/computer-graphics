@@ -11,7 +11,7 @@ from constants import RGB_CHANNELS, MAX_QUALITY
 from light import DirectionalLight
 from material import Material, COLOR_BLUE
 from object import Sphere
-from render import render_no_aa
+from render import render
 from scene import Scene
 import utils
 
@@ -19,6 +19,7 @@ SCREEN_WIDTH = 300
 SCREEN_HEIGHT = 200
 OUT_DIR = "output"
 OUTPUT_IMG_FILENAME = f"{OUT_DIR}/4_six_spheres.jpg"
+SUNLIGHT = np.array([750, 1234, 1419, 1395, 1338, 1289])
 
 
 def set_camera():
@@ -32,7 +33,7 @@ def set_scene():
     z = 1
     y = [-0.3, 0.3]
     x = [-0.6, 0, 0.6]
-    L = np.array([30, -100, 25])
+    light_direction = np.array([30, -100, 25])
     mat = Material(COLOR_BLUE)
     radius = 0.15
     positions = []
@@ -43,7 +44,7 @@ def set_scene():
         Sphere(p, mat, radius) for p in positions
     ]
     cameras = [set_camera()]
-    light = DirectionalLight(L)
+    light = DirectionalLight(light_direction, SUNLIGHT)
     return Scene(cameras, [light], spheres)
 
 
@@ -54,7 +55,7 @@ def main():
     # Rendering
     timer = utils.Timer()
     timer.start()
-    screen = render_no_aa(scene, main_camera, SCREEN_HEIGHT, SCREEN_WIDTH)
+    screen = render(scene, main_camera, SCREEN_HEIGHT, SCREEN_WIDTH)
     timer.stop()
     # ------------------------------------------------------------------------
     print(f"Total time spent rendering: {timer}")
