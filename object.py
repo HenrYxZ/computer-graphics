@@ -18,7 +18,6 @@ class Object:
         self.position = position
         self.material = material
         self.ID = None
-        self.normal_map = None
 
     def set_id(self, idx):
         self.ID = idx

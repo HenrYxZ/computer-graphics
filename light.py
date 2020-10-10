@@ -10,7 +10,7 @@ MAX_DISTANCE_LIGHT = np.inf
 AREA_LIGHT_M = 6
 AREA_LIGHT_N = 6
 #
-DEFAULT_COLOR = np.array([1, 1, 1])
+DEFAULT_INTENSITY = np.array([1, 1, 1])
 
 
 class Light:
@@ -19,11 +19,12 @@ class Light:
 
     Attributes:
         position(numpy.array): 3D position of the light
+        intensity(numpy.array): The color intensity for the light
     """
 
-    def __init__(self, position, color):
+    def __init__(self, position, intensity=DEFAULT_INTENSITY):
         self.position = position
-        self.color = DEFAULT_COLOR
+        self.intensity = intensity
 
     def get_dist(self, ph):
         """

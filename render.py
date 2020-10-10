@@ -46,7 +46,7 @@ def render(scene, camera, height, width):
             npe = utils.normalize(pp - camera.position)
             ray = Ray(pp, npe)
             color = raytrace(ray, scene)
-            output[j][i] = color.round().astype(np.uint8)
+            output[j][i] = color
             counter += 1
             if counter % step_size == 0:
                 bar.next()

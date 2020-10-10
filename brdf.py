@@ -1,10 +1,13 @@
 import numpy as np
 
+# Local Modules
+import constants
+
 
 def fresnel_function(vh, ior, k=0):
     rs = (
-            ((ior ** 2 + k ** 2) - 2 * ior * vh + vh ** 2) /
-            ((ior ** 2 + k ** 2) + 2 * ior * vh + vh ** 2)
+        ((ior ** 2 + k ** 2) - 2 * ior * vh + vh ** 2) /
+        ((ior ** 2 + k ** 2) + 2 * ior * vh + vh ** 2)
     )
     rp = (
         ((ior ** 2 + k ** 2) * vh ** 2 - 2 * ior * vh + 1) /
@@ -46,11 +49,23 @@ def cook_torrance(n, l, v, nl, ior, m, k=0, radiance=1):
 
 def brdf(intensity, n, l, v, ks, ior, m, k=0):
     nl = np.dot(n, l)
-    f0 = ((n - 1) / (n + 1)) ** 2
+    f0 = ((ior - 1) / (ior + 1)) ** 2
     reflectance = (1 - ks) * f0 + ks * cook_torrance(n, l, v, nl, ior, m, k)
     reflected_intensity = intensity * np.dot(n, l) * reflectance
     return reflected_intensity
 
+
 # ----------------------------------------------------------------------------
 def color_matching(color):
-    pass
+    xyz = np.zeros(3)
+    for i in range(len(color)):
+        intensity = color[i]
+        xyz[0] += intensity * constants.COLOR_MATCHING[i][1]
+        xyz[1] += intensity * constants.COLOR_MATCHING[i][2]
+        xyz[2] += intensity * constants.COLOR_MATCHING[i][3]
+    return xyz
+
+
+def xyz_to_rgb(color):
+    rgb_color = np.matmul(constants.XYZ_TO_RGB, color)
+    return rgb_color

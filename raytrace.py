@@ -21,22 +21,28 @@ def compute_color(ph, eye, obj, lights):
         lights([Light]): List of the lights in the scene
 
     Returns:
-        np.array: The color for this ray in numpy array of 3 channels
+        np.array: The color for this ray in numpy array of RGB channels
     """
     nh = obj.normal_at(ph)
     if nh is None:
         warnings.warn("Normal is 0 for obj: {} at ph: {}".format(obj, ph))
-        return np.zeros(3)
+        return np.zeros(RGB_CHANNELS)
     color = np.zeros(RGB_CHANNELS)
     for light in lights:
         l = light.get_l(ph)
         # Choose the corresponding shader
         mtl = obj.material
-        color = brdf(l.intensity, nh, l, eye, mtl.ks, mtl.ior, mtl.k, mtl.m)
-        xyz = color_matching(color)
-        rgb_color = xyz_to_rgb(xyz)
+        multi_color = brdf(
+            light.intensity, nh, l, eye, mtl.ks, mtl.ior, mtl.m, mtl.k
+        )
+        xyz_color = color_matching(multi_color)
+        rgb_color = xyz_to_rgb(xyz_color)
+        color += rgb_color
+    color /= len(lights)
+    color *= MAX_COLOR_VALUE
     # Ensure the colors are between 0 and 255
     final_color = np.clip(color, 0, MAX_COLOR_VALUE)
+    final_color.astype(np.uint8)
     return final_color
 
 
@@ -70,4 +76,4 @@ def raytrace(ray, scene):
         color = compute_color(ph, eye, obj_h, lights)
         return color
     else:
-        return np.zeros(3)
+        return np.zeros(RGB_CHANNELS)
