@@ -1,6 +1,7 @@
 import numpy as np
 import warnings
 # Local Modules
+from brdf import brdf, color_matching, xyz_to_rgb
 from constants import MAX_COLOR_VALUE, RGB_CHANNELS
 from ray import Ray
 import utils
@@ -30,7 +31,10 @@ def compute_color(ph, eye, obj, lights):
     for light in lights:
         l = light.get_l(ph)
         # Choose the corresponding shader
-        color = np.dot(l, nh) * DEFAULT_COLOR
+        mtl = obj.material
+        color = brdf(l.intensity, nh, l, eye, mtl.ks, mtl.ior, mtl.k, mtl.m)
+        xyz = color_matching(color)
+        rgb_color = xyz_to_rgb(xyz)
     # Ensure the colors are between 0 and 255
     final_color = np.clip(color, 0, MAX_COLOR_VALUE)
     return final_color

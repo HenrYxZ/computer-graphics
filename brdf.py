@@ -44,8 +44,13 @@ def cook_torrance(n, l, v, nl, ior, m, k=0, radiance=1):
     return r
 
 
-def brdf(intensity, n, l, v, ks, f0, ior, m, k):
+def brdf(intensity, n, l, v, ks, ior, m, k=0):
     nl = np.dot(n, l)
+    f0 = ((n - 1) / (n + 1)) ** 2
     reflectance = (1 - ks) * f0 + ks * cook_torrance(n, l, v, nl, ior, m, k)
     reflected_intensity = intensity * np.dot(n, l) * reflectance
     return reflected_intensity
+
+# ----------------------------------------------------------------------------
+def color_matching(color):
+    pass

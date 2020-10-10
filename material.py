@@ -45,3 +45,14 @@ class Material:
 
     def add_texture(self, texture):
         self.texture = texture
+
+
+class BRDFMaterial:
+    def __init__(self, ks, ior, k, m):
+        self.ks = ks
+        self.ior = ior
+        self.k = k
+        self.m = m
+
+    def get_params(self):
+        return self.ks, self.ior, self.k, self.m
