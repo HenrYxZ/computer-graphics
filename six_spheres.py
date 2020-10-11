@@ -20,6 +20,7 @@ SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 400
 OUT_DIR = "output"
 OUTPUT_IMG_FILENAME = f"{OUT_DIR}/4_six_spheres.jpg"
+RGB_IMG_FILENAME = f'{OUT_DIR}/rgb_spheres.jpg'
 MULTICOLOR_SPECTRAL_CHANNELS = 7
 
 
@@ -76,7 +77,9 @@ def main():
     # Rendering
     timer = utils.Timer()
     timer.start()
-    screen = render_mp(scene, main_camera, SCREEN_HEIGHT, SCREEN_WIDTH)
+    rgb = True
+    # rgb = False
+    screen = render_mp(scene, main_camera, SCREEN_HEIGHT, SCREEN_WIDTH, rgb)
     timer.stop()
     # ------------------------------------------------------------------------
     print(f"Total time spent rendering: {timer}")

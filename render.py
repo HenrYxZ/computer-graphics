@@ -32,7 +32,7 @@ def create_rays(camera, height, width):
     return rays
 
 
-def render(scene, camera, height, width):
+def render(scene, camera, height, width, rgb=False):
     """
     Render the image for the given scene and camera using raytracing.
 
@@ -67,7 +67,7 @@ def render(scene, camera, height, width):
             pp = camera.p00 + xp * camera.n0 + yp * camera.n1
             npe = utils.normalize(pp - camera.position)
             ray = Ray(pp, npe)
-            color = raytrace(ray, scene)
+            color = raytrace(ray, scene, rgb)
             output[j][i] = color
             counter += 1
             if counter % step_size == 0:
@@ -76,7 +76,7 @@ def render(scene, camera, height, width):
     return output
 
 
-def render_mp(scene, camera, height, width):
+def render_mp(scene, camera, height, width, rgb=False):
     """
     Render the image for the given scene and camera using raytracing in multi-
     processors.
@@ -97,7 +97,7 @@ def render_mp(scene, camera, height, width):
     pool = mp.Pool(mp.cpu_count())
     print("Shooting rays...")
     ray_colors = pool.map(
-        raytrace_mp_wrapper, [(ray, scene) for ray in rays]
+        raytrace_mp_wrapper, [(ray, scene, rgb) for ray in rays]
     )
     pool.close()
     print("Arranging pixels...")

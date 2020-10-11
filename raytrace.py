@@ -1,7 +1,7 @@
 import numpy as np
 import warnings
 # Local Modules
-from brdf import brdf, color_matching, xyz_to_rgb
+from brdf import brdf, brdf_rgb, color_matching, xyz_to_rgb
 from constants import MAX_COLOR_VALUE, RGB_CHANNELS
 from ray import Ray
 import utils
@@ -10,7 +10,7 @@ import utils
 DEFAULT_COLOR = np.array([20, 20, 200])
 
 
-def compute_color(ph, eye, obj, lights):
+def compute_color(ph, eye, obj, lights, rgb=False):
     """
     Compute the color for the given object at the given point.
 
@@ -32,9 +32,14 @@ def compute_color(ph, eye, obj, lights):
         l = light.get_l(ph)
         # Choose the corresponding shader
         mtl = obj.material
-        multi_color = brdf(
-            light.intensity, nh, l, eye, mtl.ks, mtl.ior, mtl.m, mtl.k
-        )
+        if rgb:
+            multi_color = brdf_rgb(
+                light.intensity, nh, l, eye, mtl.ks, mtl.ior, mtl.m, mtl.k
+            )
+        else:
+            multi_color = brdf(
+                light.intensity, nh, l, eye, mtl.ks, mtl.ior, mtl.m, mtl.k
+            )
         xyz_color = color_matching(multi_color)
         rgb_color = xyz_to_rgb(xyz_color)
         color += rgb_color
@@ -46,7 +51,7 @@ def compute_color(ph, eye, obj, lights):
     return final_color
 
 
-def raytrace(ray, scene):
+def raytrace(ray, scene, rgb=False):
     """
     Trace the ray to the closest intersection point with an object and get the
     color at that point.
@@ -73,7 +78,7 @@ def raytrace(ray, scene):
     if obj_h:
         ph = ray.at(t_min)
         eye = utils.normalize(ray.pr - ph)
-        color = compute_color(ph, eye, obj_h, lights)
+        color = compute_color(ph, eye, obj_h, lights, rgb)
         return color
     else:
         return np.zeros(RGB_CHANNELS)
