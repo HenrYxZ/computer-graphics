@@ -20,7 +20,7 @@ SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 400
 OUT_DIR = "output"
 OUTPUT_IMG_FILENAME = f"{OUT_DIR}/4_six_spheres.jpg"
-MULTICOLOR_SPECTAL_CHANNELS = 7
+MULTICOLOR_SPECTRAL_CHANNELS = 7
 
 
 def set_camera():
@@ -53,7 +53,7 @@ def set_scene():
     materials.append(BRDFMaterial(ks, constants.CR_IOR, constants.CR_K, m))
     # PVC
     m = 0.1
-    k = np.zeros(MULTICOLOR_SPECTAL_CHANNELS)
+    k = np.zeros(MULTICOLOR_SPECTRAL_CHANNELS)
     materials.append(BRDFMaterial(ks, constants.PVC_IOR, k, m))
     m = 0.3
     materials.append(BRDFMaterial(ks, constants.PVC_IOR, k, m))
